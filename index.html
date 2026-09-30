@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>jaoriche studio — เครดิตการซื้อขาย</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fdf8ff;--card:#fff;--text:#5d5265;--muted:#9c90a4;
+  --primary:#a98de3;--primaryText:#fff;--accent:#f7c7df;
+  --border:#eee5f2;--shadow:0 12px 35px rgba(111,83,132,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text)}
+body{overflow-x:hidden}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;border:0}
+.wrap{max-width:900px;margin:auto;padding:22px 16px 100px}
+.topbar{display:flex;justify-content:flex-end;gap:8px;margin-bottom:8px}
+.icon-btn,.admin-btn{background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:14px;padding:8px 12px;box-shadow:var(--shadow)}
+.admin-btn{font-size:12px}
+.hero{background:var(--card);border:1px solid var(--border);border-radius:28px;padding:26px 22px;text-align:center;box-shadow:var(--shadow);overflow:hidden}
+.avatar{width:86px;height:86px;border-radius:50%;object-fit:cover;border:5px solid #fff;box-shadow:0 8px 25px rgba(0,0,0,.10);margin:auto;display:block;background:var(--accent)}
+.avatar.hidden{display:none}
+.store-letter{width:86px;height:86px;border-radius:50%;display:grid;place-items:center;margin:auto;background:var(--primary);color:var(--primaryText);font-size:34px;font-weight:600}
+h1{font-size:27px;margin:14px 0 4px}
+.desc{color:var(--muted);margin:0 auto;max-width:600px;line-height:1.8}
+.banner-wrap{margin-top:20px;border-radius:22px;overflow:hidden;background:#f4edf7}
+.banner-wrap img{width:100%;max-height:310px;object-fit:cover;display:block}
+.banner-wrap.hidden{display:none}
+.stats{display:flex;justify-content:center;gap:10px;margin:18px 0}
+.stat{background:var(--card);border:1px solid var(--border);padding:10px 20px;border-radius:17px;min-width:130px}
+.stat b{display:block;font-size:20px;color:var(--primary)}
+.stat span{font-size:12px;color:var(--muted)}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:26px 4px 12px}
+.section-title h2{font-size:19px;margin:0}
+.reviews{display:grid;gap:12px}
+.review{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px;box-shadow:var(--shadow);animation:pop .3s ease}
+.review-head{display:flex;gap:12px;align-items:center}
+.review-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--text);font-weight:600}
+.review-name{font-weight:600}
+.stars{color:#efb84d;letter-spacing:2px;font-size:14px}
+.review-date{font-size:11px;color:var(--muted)}
+.review-text{margin:10px 0 0;line-height:1.75}
+.empty{padding:40px;text-align:center;color:var(--muted);background:var(--card);border-radius:20px;border:1px dashed var(--border)}
+.float-review{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:20;background:var(--primary);color:var(--primaryText);padding:10px 18px;border-radius:999px;box-shadow:0 8px 24px rgba(100,70,130,.25);font-size:13px}
+.music{position:fixed;right:16px;bottom:18px;z-index:19;width:44px;height:44px;border-radius:50%;background:var(--card);color:var(--primary);border:1px solid var(--border);box-shadow:var(--shadow)}
+.modal{position:fixed;inset:0;background:rgba(52,40,61,.38);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal.show{display:flex}
+.modal-box{background:var(--card);width:min(560px,100%);max-height:90vh;overflow:auto;border-radius:25px;padding:22px;box-shadow:0 25px 70px rgba(50,30,70,.2)}
+.modal-box h3{margin:0 0 14px}
+.form-grid{display:grid;gap:12px}
+label{font-size:12px;color:var(--muted);display:grid;gap:6px}
+input,textarea,select{width:100%;border:1px solid var(--border);background:#fff;color:var(--text);border-radius:13px;padding:10px 12px;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--primary)}
+textarea{min-height:90px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.primary{background:var(--primary);color:var(--primaryText);border-radius:13px;padding:10px 16px}
+.secondary{background:#f5eff7;color:var(--text);border-radius:13px;padding:10px 16px}
+.danger{background:#fff0f2;color:#c55d70;border-radius:13px;padding:10px 16px}
+.tabs{display:flex;gap:6px;margin-bottom:18px;background:#f7f1f8;padding:5px;border-radius:15px}
+.tab{flex:1;padding:9px;border-radius:11px;background:transparent;color:var(--muted)}
+.tab.active{background:#fff;color:var(--text);box-shadow:0 3px 12px rgba(0,0,0,.06)}
+.admin-panel{display:none}
+.admin-panel.show{display:block}
+.note{font-size:11px;color:var(--muted);line-height:1.6;background:#faf6fb;border-radius:12px;padding:10px}
+.heart{position:fixed;pointer-events:none;z-index:100;font-size:18px;animation:heart 1s ease-out forwards}
+@keyframes heart{0%{opacity:0;transform:translate(-50%,0) scale(.5)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-90px) scale(1.25) rotate(18deg)}}
+@keyframes pop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(max-width:560px){.row{grid-template-columns:1fr}.wrap{padding-top:10px}.hero{border-radius:22px}h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <button class="icon-btn" id="musicTop" onclick="toggleMusic()">♫ เพลง</button>
+    <button class="admin-btn" onclick="openAdmin()">⚙ หลังบ้าน</button>
+  </div>
+  <section class="hero">
+    <div id="avatarArea"></div>
+    <h1 id="storeName"></h1>
+    <p class="desc" id="storeDesc"></p>
+    <div class="banner-wrap" id="bannerWrap"><img id="banner" alt="แบนเนอร์ร้าน"></div>
+  </section>
+  <div class="stats">
+    <div class="stat"><b id="reviewCount">0</b><span>รีวิวทั้งหมด</span></div>
+    <div class="stat"><b id="avgRating">—</b><span>คะแนนเฉลี่ย</span></div>
+  </div>
+  <div class="section-title"><h2>♡ รีวิวจากลูกค้า</h2></div>
+  <section class="reviews" id="reviews"></section>
+</div>
+
+<button class="float-review" onclick="openReview()">✎ เขียนรีวิว</button>
+<button class="music" id="musicBtn" onclick="toggleMusic()" aria-label="เปิดปิดเพลง">♫</button>
+<audio id="audio" loop></audio>
+
+<div class="modal" id="reviewModal">
+  <div class="modal-box">
+    <h3>เขียนรีวิว ♡</h3>
+    <div class="form-grid">
+      <label>ชื่อของคุณ<input id="rName" maxlength="40" placeholder="เช่น น้องมายด์"></label>
+      <label>ให้คะแนน
+        <select id="rRating">
+          <option value="5">★★★★★ 5 คะแนน</option>
+          <option value="4">★★★★☆ 4 คะแนน</option>
+          <option value="3">★★★☆☆ 3 คะแนน</option>
+          <option value="2">★★☆☆☆ 2 คะแนน</option>
+          <option value="1">★☆☆☆☆ 1 คะแนน</option>
+        </select>
+      </label>
+      <label>รีวิว<textarea id="rText" maxlength="500" placeholder="เขียนความประทับใจได้เลยค่ะ"></textarea></label>
+    </div>
+    <div class="actions">
+      <button class="secondary" onclick="closeModal('reviewModal')">ยกเลิก</button>
+      <button class="primary" id="btnSubmitReview" onclick="submitReview()">ส่งรีวิว</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="loginModal">
+  <div class="modal-box" style="max-width:390px">
+    <h3>เข้าสู่ระบบแอดมิน 🔐</h3>
+    <label>รหัสผ่าน<input id="adminPass" type="password" inputmode="numeric" placeholder="รหัสแอดมิน"></label>
+    <div class="actions"><button class="secondary" onclick="closeModal('loginModal')">ยกเลิก</button><button class="primary" onclick="login()">เข้าสู่ระบบ</button></div>
+  </div>
+</div>
+
+<div class="modal" id="adminModal">
+  <div class="modal-box">
+    <h3>หลังบ้าน — jaoriche studio</h3>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('shop',this)">ร้านค้า</button>
+      <button class="tab" onclick="showTab('style',this)">ธีม</button>
+      <button class="tab" onclick="showTab('reviewsTab',this)">รีวิว</button>
+    </div>
+    <div id="shop" class="admin-panel show">
+      <div class="form-grid">
+        <label>ชื่อร้าน<input id="aName"></label>
+        <label>รายละเอียดร้าน<textarea id="aDesc"></textarea></label>
+        <label>ลิงก์รูปโปรไฟล์<input id="aAvatar" placeholder="https://..."></label>
+        <label>ลิงก์รูปแบนเนอร์ (ต้องเปิดเป็นสาธารณะ)<input id="aBanner" placeholder="https://drive.google.com/... หรือ direct image URL"></label>
+        <label>ลิงก์เพลง<input id="aMusic" placeholder="ลิงก์ไฟล์เพลง/เสียงที่เบราว์เซอร์เปิดเล่นได้"></label>
+        <label>รหัสแอดมินใหม่<input id="aPass" type="password" placeholder="เว้นว่างหากไม่เปลี่ยน"></label>
+        <div class="note">สำหรับ Google Drive ควรใช้ลิงก์ไฟล์ที่แชร์เป็น “ทุกคนที่มีลิงก์” และลิงก์นั้นต้องสามารถโหลดรูป/ไฟล์ได้จากเบราว์เซอร์โดยตรง หากเป็นหน้า preview ของ Drive บางลิงก์อาจไม่สามารถใช้เป็นรูปได้</div>
+      </div>
+      <div class="actions"><button class="primary" onclick="saveShop()">บันทึกข้อมูล</button></div>
+    </div>
+    <div id="style" class="admin-panel">
+      <div class="form-grid">
+        <div class="row">
+          <label>สีพื้นหลัง<input id="cBg" placeholder="#fdf8ff"></label>
+          <label>สีตัวอักษร<input id="cText" placeholder="#5d5265"></label>
+        </div>
+        <div class="row">
+          <label>สีปุ่ม<input id="cPrimary" placeholder="#a98de3"></label>
+          <label>สีตัวอักษรบนปุ่ม<input id="cPrimaryText" placeholder="#ffffff"></label>
+        </div>
+        <div class="row">
+          <label>สีการ์ด<input id="cCard" placeholder="#ffffff"></label>
+          <label>สีตกแต่ง/วงกลม<input id="cAccent" placeholder="#f7c7df"></label>
+        </div>
+      </div>
+      <div class="actions"><button class="primary" onclick="saveStyle()">บันทึกธีม</button></div>
+    </div>
+    <div id="reviewsTab" class="admin-panel">
+      <div id="adminReviews"></div>
+      <div class="actions"><button class="danger" onclick="clearReviews()">ล้างรีวิวทั้งหมด</button></div>
+    </div>
+    <div class="actions"><button class="secondary" onclick="closeModal('adminModal')">ปิด</button></div>
+  </div>
+</div>
+
+<script>
+const DB_URL = "https://test-yiyi16-default-rtdb.firebaseio.com/data.json";
+const KEY = 'jaoriche_credit_v1';
+
+const defaults = {
+ name: 'jaoriche studio',
+ desc: 'ขอบคุณที่เข้ามาแสดงความพึงพอใจค่ะ',
+ avatar: '',
+ banner: '',
+ music: '',
+ password: '160243',
+ colors: {bg:'#fdf8ff', text:'#5d5265', primary:'#a98de3', primaryText:'#ffffff', card:'#ffffff', accent:'#f7c7df'},
+ reviews: []
+};
+
+let data = JSON.parse(localStorage.getItem(KEY) || 'null') || defaults;
+data = {...defaults, ...data, colors: {...defaults.colors, ...(data.colors || {})}, reviews: Array.isArray(data.reviews) ? data.reviews : []};
+
+async function syncWithFirebase() {
+  try {
+    const res = await fetch(DB_URL);
+    if (res.ok) {
+      const fbData = await res.json();
+      if (fbData) {
+        data = {...defaults, ...fbData, colors: {...defaults.colors, ...(fbData.colors || {})}, reviews: Array.isArray(fbData.reviews) ? fbData.reviews : []};
+        localStorage.setItem(KEY, JSON.stringify(data));
+        apply();
+      } else {
+        await persist();
+      }
+    }
+  } catch (err) {
+    console.error("Fetch Firebase error:", err);
+  }
+}
+
+async function persist() {
+  localStorage.setItem(KEY, JSON.stringify(data));
+  try {
+    await fetch(DB_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  } catch (err) {
+    console.error("Save to Firebase error:", err);
+  }
+}
+
+function validColor(v) { return /^#[0-9a-fA-F]{6}$/.test(v); }
+
+function apply() {
+  const c = data.colors;
+  Object.entries({bg:c.bg, text:c.text, primary:c.primary, primaryText:c.primaryText, card:c.card, accent:c.accent}).forEach(([k,v]) => {
+    if(validColor(v)) document.documentElement.style.setProperty('--' + k, v);
+  });
+  document.getElementById('storeName').textContent = data.name;
+  document.getElementById('storeDesc').textContent = data.desc;
+  const av = document.getElementById('avatarArea');
+  av.innerHTML = data.avatar ? `<img class="avatar" src="${esc(data.avatar)}" onerror="this.style.display='none'">` : `<div class="store-letter">${esc((data.name||'J').trim()[0]||'J')}</div>`;
+  const bw = document.getElementById('bannerWrap'), bi = document.getElementById('banner');
+  if (data.banner) { bw.classList.remove('hidden'); bi.src = data.banner; } else bw.classList.add('hidden');
+  document.getElementById('audio').src = data.music || '';
+  renderReviews(); updateMusicUI();
+}
+
+function esc(s) { return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+
+function renderReviews() {
+  const el = document.getElementById('reviews');
+  document.getElementById('reviewCount').textContent = data.reviews.length;
+  const avg = data.reviews.length ? data.reviews.reduce((a,r) => a + Number(r.rating), 0) / data.reviews.length : 0;
+  document.getElementById('avgRating').textContent = avg ? avg.toFixed(1) : '—';
+  if (!data.reviews.length) { el.innerHTML = '<div class="empty">ยังไม่มีรีวิวแรกเลยค่ะ ♡<br>กด “เขียนรีวิว” เพื่อเป็นคนแรก</div>'; return; }
+  el.innerHTML = data.reviews.slice().reverse().map(r => `
+    <article class="review">
+      <div class="review-head"><div class="review-avatar">${esc((r.name||'น').trim()[0]||'น')}</div>
+      <div><div class="review-name">${esc(r.name)}</div><div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div><div class="review-date">${esc(r.date)}</div></div></div>
+      <p class="review-text">${esc(r.text)}</p>
+    </article>`).join('');
+}
+
+function openReview() { document.getElementById('reviewModal').classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+async function submitReview() {
+  const name = document.getElementById('rName').value.trim();
+  const text = document.getElementById('rText').value.trim();
+  const rating = Number(document.getElementById('rRating').value);
+  if (!name || !text) { alert('กรุณากรอกชื่อและรีวิวค่ะ'); return; }
+  
+  const btn = document.getElementById('btnSubmitReview');
+  btn.disabled = true;
+  btn.textContent = 'กำลังส่ง...';
+
+  data.reviews.push({ name, text, rating, date: new Date().toLocaleDateString('th-TH', {year:'numeric', month:'short', day:'numeric'}) });
+  await persist();
+  renderReviews();
+  renderAdminReviews();
+  closeModal('reviewModal');
+
+  document.getElementById('rName').value = '';
+  document.getElementById('rText').value = '';
+  btn.disabled = false;
+  btn.textContent = 'ส่งรีวิว';
+}
+
+function openAdmin() { document.getElementById('loginModal').classList.add('show'); document.getElementById('adminPass').focus(); }
+
+function login() {
+  if (document.getElementById('adminPass').value !== data.password) { alert('รหัสผ่านไม่ถูกต้อง'); return; }
+  closeModal('loginModal'); fillAdmin(); document.getElementById('adminModal').classList.add('show'); document.getElementById('adminPass').value = '';
+}
+
+function fillAdmin() {
+  aName.value = data.name; aDesc.value = data.desc; aAvatar.value = data.avatar; aBanner.value = data.banner; aMusic.value = data.music;
+  cBg.value = data.colors.bg; cText.value = data.colors.text; cPrimary.value = data.colors.primary; cPrimaryText.value = data.colors.primaryText; cCard.value = data.colors.card; cAccent.value = data.colors.accent; aPass.value = '';
+  renderAdminReviews();
+}
+
+async function saveShop() {
+  data.name = aName.value.trim() || defaults.name;
+  data.desc = aDesc.value.trim();
+  data.avatar = aAvatar.value.trim();
+  data.banner = aBanner.value.trim();
+  data.music = aMusic.value.trim();
+  if (aPass.value.trim()) data.password = aPass.value.trim();
+  await persist(); apply(); alert('บันทึกข้อมูลร้านแล้วค่ะ ♡');
+}
+
+async function saveStyle() {
+  const vals = {bg:cBg.value.trim(), text:cText.value.trim(), primary:cPrimary.value.trim(), primaryText:cPrimaryText.value.trim(), card:cCard.value.trim(), accent:cAccent.value.trim()};
+  if (Object.values(vals).some(v => !validColor(v))) { alert('กรุณาใส่สีเป็นรูปแบบ #RRGGBB เช่น #A98DE3'); return; }
+  data.colors = vals; await persist(); apply(); alert('บันทึกธีมแล้วค่ะ ♡');
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.admin-panel').forEach(x => x.classList.remove('show'));
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.getElementById(id).classList.add('show'); btn.classList.add('active');
+}
+
+function renderAdminReviews() {
+  const el = document.getElementById('adminReviews');
+  if (!data.reviews.length) { el.innerHTML = '<div class="empty">ไม่มีรีวิว</div>'; return; }
+  el.innerHTML = data.reviews.map((r,i) => `<div class="review" style="margin-bottom:8px"><b>${esc(r.name)}</b> · ${'★'.repeat(r.rating)}<p>${esc(r.text)}</p><button class="danger" onclick="deleteReview(${i})">ลบ</button></div>`).join('');
+}
+
+async function deleteReview(i) {
+  if (confirm('ลบรีวิวนี้หรือไม่?')) {
+    data.reviews.splice(i, 1);
+    await persist(); renderReviews(); renderAdminReviews();
+  }
+}
+
+async function clearReviews() {
+  if (confirm('ต้องการล้างรีวิวทั้งหมดหรือไม่?')) {
+    data.reviews = [];
+    await persist(); renderReviews(); renderAdminReviews();
+  }
+}
+
+let playing = false;
+function toggleMusic() {
+  const a = document.getElementById('audio');
+  if (!data.music) { alert('ยังไม่ได้ใส่ลิงก์เพลงในโหมดแอดมินค่ะ'); return; }
+  if (a.paused) { a.play().then(() => { playing = true; updateMusicUI(); }).catch(() => alert('เบราว์เซอร์ไม่อนุญาตให้เล่นไฟล์นี้ หรือลิงก์เพลงไม่ใช่ไฟล์ที่เปิดเล่นได้')); }
+  else { a.pause(); playing = false; updateMusicUI(); }
+}
+
+function updateMusicUI() {
+  document.getElementById('musicBtn').textContent = playing ? '❚❚' : '♫';
+  document.getElementById('musicTop').textContent = playing ? '❚❚ เพลง' : '♫ เพลง';
+}
+
+document.addEventListener('click', e => {
+  if (e.target.closest('button,input,textarea,select,a')) return;
+  const h = document.createElement('span'); h.className = 'heart'; h.textContent = ['♡','♥','💗','💕'][Math.floor(Math.random()*4)];
+  h.style.left = e.clientX + 'px'; h.style.top = e.clientY + 'px'; document.body.appendChild(h); setTimeout(() => h.remove(), 1000);
+});
+
+document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); }));
+
+apply();
+syncWithFirebase();
+</script>
+</body>
+  </html>
+  
